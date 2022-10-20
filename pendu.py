@@ -4,7 +4,7 @@ with open("dico_france.txt", "r", encoding='ISO-8859-15') as dico:
     dicoList = dico.readlines()
 
 
-#Enlever les \n, les majuscules, les accents, remplacer caractères spéciaux
+#Enlever les \n, les majuscules, les accents, remplacer caractères spéciaux :
 forbChar = ("ÀÁÂÆÇÈÉÊËÌÍÎÏÑÒÓÔŒÙÚÛÜÝŸàáâæçèéêëìíîïñòóôœùúûüýÿ\nABCDEFGHIJKLMNOPQRSTUVWXYZ") 
 correspondForChar = {
     "À" : "a",
@@ -94,7 +94,7 @@ for i in range(0, len(dicoList)):
     dicoList[i] = "".join(tmpWord)
 
 
-#fonction qui extraire les mots du nombre de lettre demandé :
+#fonction qui extrait seulement les mots du nombre de lettre demandé :
 def wordsWithXLetters(chosedNumber):
     filteredList = []
     for word in dicoList:
@@ -114,12 +114,6 @@ while not ( level <= 3 and level >= 1) or level == 0:
     print("Bonjour, à quel niveau souhaites tu jouer ?")
     level = int(input("Débutant : 1, intermédiaire : 2, expert : 3): "))
 
-    #A décommenter pour permettre le choix de la taille des mots
-    # wordSize = 0
-    # while wordSize < 2 or wordSize > 10:
-    #     wordSize = int(input("Quel taille de mot voulez-vous tenter deviner ? (entre 2 et 10) "))
-    # dicoList = wordsWithXLetters(wordSize)
-
     wordToGuess = ""
     match level:
         case 1:
@@ -132,13 +126,20 @@ while not ( level <= 3 and level >= 1) or level == 0:
             wordToGuess = dicoList[random.randint(0, len(dicoList))]
             nbOfLifes = 4
 
+# # A décommenter pour permettre le choix de la taille des mots :
+# while True:
+#     wordSize = int(input("Quel taille de mot voulez-vous tenter deviner ? (entre 2 et 10) "))
+#     if not (wordSize < 2 or wordSize > 10):
+#         break
+# dicoList = wordsWithXLetters(wordSize)
+
 #Affichage :
-win = False
 proposedLetters = ""
+win = False
 while not win and nbOfLifes > 0:
     print("Nombre de vie(s) restante(s) : " + str(nbOfLifes))
-    print("Lettre(s) proposée(s) : " + proposedLetters)
-    print(wordToGuess)
+    if level != 3:
+        print("Lettre(s) proposée(s) : " + proposedLetters)
     
     for letter in wordToGuess:
         if letter in proposedLetters:
@@ -149,21 +150,33 @@ while not win and nbOfLifes > 0:
             print(" _ ", end="")
     print("\n")
 
-    proposition = input("Quelle lettre proposes tu ? ")
-    proposedLetters += proposition
+    while True:
+        proposition = input("Quelle lettre proposes tu ? ")
+        if len(proposition) == 1:
+            break
+        elif len(proposition) > 1:
+            print("Vous ne devez proposer qu'une seule lettre !")
+            
+
+    proposedLetters += proposition + " "
     if proposition not in wordToGuess:
         nbOfLifes -=1
 
     win = True
     for letter in wordToGuess:
-        if letter != " ":
+        if letter != " " or letter != "'" or letter != "-":
             if letter not in proposedLetters:
                 win = False
                 break
 
-print("")
+#Résultats :
 if win:
-    print("Bravo, tu as gagné !")
+    print(wordToGuess)
+    print("################################################")
+    print("########### Bravo, tu as gagné ! ###############")
+    print("################################################")
 else:
-    print("Tu as perdu :(")
+    print("################################################")
+    print("############### Tu as perdu :( #################")
+    print("################################################")
     print("La réponse était \"" + wordToGuess + "\"")
