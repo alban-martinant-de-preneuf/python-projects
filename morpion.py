@@ -8,16 +8,19 @@ try:
 except:
     pass
 
+#Fonction d'affichage de la grille
 def displayTable(table):
     for line in table:
         for char in line:
             print(char, end="")
         print("")
 
+#Fonction d'affichage des scores
 def displayScores():
     for user in users:
         print("{0} : {1} point(s)".format(user["name"], user["score"]))
 
+#Fonction pour la vérification de la partie en cours
 def checkWinner(table, users):
     for user in users:
         symbol = user["symbol"]
@@ -45,7 +48,7 @@ def checkWinner(table, users):
     #Le jeu peut continuer si il n'y a pas de gagnants et qu'il reste des cases
     return "continue"
 
-
+#Fonction d'affichage des résultats de la partie
 def displayResults(result, users):
     for user in users:
         if result == user["name"]:
@@ -53,7 +56,7 @@ def displayResults(result, users):
     if result == "no winner":
         print("Match nul")
 
-
+#Fonction qui gère le jeu
 def play():
     player1 = (input("Username 1 Croix : "))
     player2 = (input("Username 2 Rond : "))
@@ -126,26 +129,24 @@ def play():
                 break
     
     winner = checkWinner(table, players)
-
-    #Incrémenter les scores:
-    for user in users:
-        if user["name"] == winner:
-            user["score"] += 1
-            #Enregistrer les scores:
-            with open("scores.txt", "w+") as scores:
-                for user in users:
-                    scores.write(user["name"] + ", " + str(user["score"]) + "\n")
+        
+    #Incrémenter et enregistrer les scores:
+    with open("scores.txt", "w") as scores:
+        for user in users:
+            if user["name"] == winner:
+                user["score"] += 1
+            scores.write(user["name"] + ", " + str(user["score"]) + "\n")
 
     #Afficher les scores :
     displayResults(winner, users)
 
     
 #programme principal :
-wantExit = "N"
-while wantExit == "N":
+other = "O"
+while other == "O":
     userWantTo = ""
     while userWantTo != "jouer" and userWantTo != "scores" and userWantTo != "exit":
-        userWantTo = input("Bonjour, souhaites tu <jouer> ou voir les <scores> ? ( <exit> pour quitter ) : ")
+        userWantTo = input("Bonjour, souhaites tu jouer ou voir les scores ? ( exit pour quitter ) : ")
 
     match userWantTo:
         case "jouer":
@@ -155,4 +156,4 @@ while wantExit == "N":
         case "exit":
             exit()
     
-    wantExit = input("Une autre partie ? (O/N) : ")
+    other = input("Une autre partie ? (O/N) : ")
