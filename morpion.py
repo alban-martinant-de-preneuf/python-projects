@@ -19,6 +19,7 @@ def displayTable(table):
 def displayScores():
     #Classer par scores décroissant
     users.sort(key=lambda x: x.get('score'), reverse=True)
+    #Afficher
     print("")
     for user in users:
         print("{0} : {1} point(s)".format(user["name"], user["score"]))
@@ -115,7 +116,7 @@ def play():
                     xOK = x >= 0 and x <= 2
                     yOK = y >= 0 and y <= 2
 
-                    if xOK and yOK:
+                    if xOK and yOK: # and len(coordinates) == 2:
                         isvalid = True
 
                 #Vérifier si la case est déjà joué :        
@@ -146,12 +147,12 @@ def play():
 
     
 #programme principal :
-other = "O"
-while other == "O":
-    userWantTo = ""
-    while userWantTo != "jouer" and userWantTo != "scores" and userWantTo != "exit":
-        userWantTo = input("Bonjour, souhaites tu jouer ou voir les scores ? ( exit pour quitter ) : ")
+userWantTo = ""
+while userWantTo != "jouer" and userWantTo != "scores" and userWantTo != "exit":
+    userWantTo = input("Bonjour, souhaites tu jouer ou voir les scores ? (jouer/scores ou exit pour quitter) : ")
+    userWantTo = userWantTo.lower()
 
+while True:
     match userWantTo:
         case "jouer":
             play()
@@ -160,4 +161,16 @@ while other == "O":
         case "exit":
             exit()
     
-    other = input("Une autre partie ? (O/N) : ")
+    otherRound = ""
+    while otherRound != "O" and otherRound != "N":
+        otherRound = input("Veux tu continuer à jouer ? (O/N) : ")
+        otherRound = otherRound.upper()
+
+    match otherRound:
+        case "N":
+            exit()
+        case "O":
+            userWantTo = ""
+            while userWantTo != "jouer" and userWantTo != "scores":
+                userWantTo = input("Tu souhaites jouer ou voir les scores ? (jouer/scores) : ")
+                userWantTo = userWantTo.lower()
