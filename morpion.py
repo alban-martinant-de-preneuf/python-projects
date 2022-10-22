@@ -1,7 +1,7 @@
 #Chargement des anciens utilisateurs et scores :
 users = []
 try:
-    with open("scores.txt", "r+") as scores:
+    with open("scores.txt", "r") as scores:
         for line in scores:
             user = line.split(", ")
             users.append({"name" : user[0], "score" : int(user[1])})
@@ -17,8 +17,12 @@ def displayTable(table):
 
 #Fonction d'affichage des scores
 def displayScores():
+    #Classer par scores décroissant
+    users.sort(key=lambda x: x.get('score'), reverse=True)
+    print("")
     for user in users:
         print("{0} : {1} point(s)".format(user["name"], user["score"]))
+    print("")
 
 #Fonction pour la vérification de la partie en cours
 def checkWinner(table, users):
