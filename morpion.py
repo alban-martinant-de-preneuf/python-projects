@@ -57,9 +57,11 @@ def checkWinner(table, users):
 def displayResults(result, users):
     for user in users:
         if result == user["name"]:
-            print("Bravo " + user["name"])
+            print("Le gagnant est " + user["name"])
+            print("")
     if result == "no winner":
         print("Match nul")
+        print("")
 
 #Fonction qui gère le jeu
 def play():
@@ -104,13 +106,23 @@ def play():
                 isvalid = False
                 while not isvalid:
                     coordinates = input(players[i]["name"] + " joue (ligne puis colonne : ")
-                    x = int(coordinates[0]) - 1
-                    y = int(coordinates[-1]) -1
-                    xOK = x >= 0 and x <= 2
-                    yOK = y >= 0 and y <= 2
+                    #Vérification saisie utilisateur
+                    if len(coordinates) == 2 or (len(coordinates) == 3 and coordinates[1] == " "):
+                        try:
+                            x = int(coordinates[0]) - 1
+                            y = int(coordinates[-1]) -1
+                        except:
+                            x = -1
+                            y = -1
 
-                    if xOK and yOK: # and len(coordinates) == 2:
-                        isvalid = True
+                        xOK = x >= 0 and x <= 2
+                        yOK = y >= 0 and y <= 2
+                        if xOK and yOK:
+                            isvalid = True
+                        else:
+                            print("coordonées invalides")
+                    else:
+                        print("coordonées invalides")
 
                 #Vérifier si la case est déjà joué :        
                 if table[x][y] == " - ":
