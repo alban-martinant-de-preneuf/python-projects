@@ -63,37 +63,30 @@ def displayResults(result, users):
 
 #Fonction qui gère le jeu
 def play():
-    player1 = (input("Username 1 Croix : "))
-    player2 = (input("Username 2 Rond : "))
+    names = []
+    names.append(input("Username 1 Croix : "))
+    names.append(input("Username 2 Rond : "))
 
     players = []
 
-    player1WasIn = False
-    for user in users:
-        if user["name"] ==  player1:
-            user["symbol"] = " X "
-            players.append(user)
-            player1WasIn = True
+    #Chargement/création des joueurs
+    playerWasIn = [False, False]
+    for i in range(2):
+        #si existaient déjà
+        for user in users:
+            if user["name"] == names[i]:
+                user["symbol"] = " X " if i == 0 else " O "
+                players.append(user)
+                playerWasIn[i] = True
+        #si ils n'existaient pas
+        if not playerWasIn[i]:
+            users.append({"name" : names[i]})
+            users[-1]["score"] = 0
+            users[-1]["symbol"] = " X " if i == 0 else " O "
+            players.append(users[-1])
 
-    player2WasIn = False
-    for user in users:
-        if user["name"] ==  player2:
-            user["symbol"] = " O "
-            players.append(user)
-            player2WasIn = True
 
-    if not player1WasIn:
-        users.append({"symbol" : " X "})
-        users[-1]["name"] = player1
-        users[-1]["score"] = 0
-        players.append(users[-1])
-
-    if not player2WasIn:
-        users.append({"symbol" : " O "})
-        users[-1]["name"] = player2
-        users[-1]["score"] = 0
-        players.append(users[-1])
-    
+    #Création et affichage du tableau
     table = [
         [" - ", " - ", " - "],
         [" - ", " - ", " - "],
